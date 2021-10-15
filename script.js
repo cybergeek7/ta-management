@@ -15,29 +15,7 @@ const studentMajor = document.getElementById('major')
 const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = [
-  {
-    firstName: 'Fahad',
-    lastName: 'Abdulhameed',
-    id: '45',
-    major: 'Programming',
-    selected: false,
-  },
-  {
-    firstName: 'Sara',
-    lastName: 'W',
-    id: '5',
-    major: 'Programming',
-    selected: false,
-  },
-  {
-    firstName: 'Jack',
-    lastName: 'A',
-    id: '325',
-    major: 'Programming',
-    selected: false,
-  },
-]
+const students = []
 
 let currentStudentIndex = 0
 
@@ -134,7 +112,6 @@ deleteBtn.addEventListener('click', (e) => {
   students.splice(index, 1)
   currentStudentIndex -= 1
   updateLogs(currentStudent, 'Removed')
-  console.log(students)
 })
 
 saveBtn.addEventListener('click', (e) => {
@@ -153,7 +130,6 @@ saveBtn.addEventListener('click', (e) => {
   }
   clearInputs()
   disableNewEditDeleteBtns(false)
-  console.log(students)
 })
 
 cancelBtn.addEventListener('click', (e) => {
