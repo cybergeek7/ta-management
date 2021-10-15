@@ -70,8 +70,6 @@ function disableSaveCancelBtns(param) {
 function updateLogs(student, action) {
   let text = `\n${action}: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
   logs.value += text
-  // students.push(student)
-  console.log(students)
 }
 
 function constructStudent() {
@@ -85,23 +83,24 @@ function constructStudent() {
   updateLogs(student, 'Added')
 }
 
-function editStudent(student) {
+function retrieveStudent(student) {
   fname.value = student.firstName
   lname.value = student.lastName
   studentId.value = student.id
   studentMajor.value = student.major
   studentSelected.checked = student.selected
-
-  students.forEach((studentIteration) => {
-    if (studentIteration.id === student.id) {
-      studentIteration.firsName = fname.value
-      studentIteration.lastName = lname.value
-      studentIteration.id = studentId.value
-      studentIteration.major = studentMajor.value
-      studentIteration.selected = studentSelected.checked
-    }
-  })
 }
+function editStudent() {
+  let currentStudent = students[currentStudentIndex]
+  currentStudent.firstName = fname.value
+  currentStudent.lastName = lname.value
+  currentStudent.id = studentId.value
+  currentStudent.major = studentMajor.value
+  currentStudent.selected = studentSelected.checked
+}
+
+clearInputs()
+logs.value = ''
 
 newBtn.addEventListener('click', (e) => {
   e.preventDefault()
@@ -120,8 +119,7 @@ editBtn.addEventListener('click', (e) => {
   disableNavBtns(true)
   disableNewEditDeleteBtns(true)
   disableSaveCancelBtns(false)
-  let student = students.pop()
-  editStudent(student)
+  retrieveStudent(students[currentStudentIndex])
 })
 
 deleteBtn.addEventListener('click', (e) => {
@@ -136,6 +134,7 @@ deleteBtn.addEventListener('click', (e) => {
   students.splice(index, 1)
   currentStudentIndex -= 1
   updateLogs(currentStudent, 'Removed')
+  console.log(students)
 })
 
 saveBtn.addEventListener('click', (e) => {
@@ -143,18 +142,18 @@ saveBtn.addEventListener('click', (e) => {
   if (!fname.value || !lname.value || !studentId.value) {
     return alert('Please fill out the fields above.')
   }
-  disableNewEditDeleteBtns(false)
   disableNavBtns(false)
   disableSaveCancelBtns(true)
   if (editBtn.disabled) {
-    let student = students.pop()
-    editStudent(student)
-    updateLogs(student, 'Edited')
-    students.push(student)
+    let currentStudent = students[currentStudentIndex]
+    editStudent()
+    updateLogs(currentStudent, 'Edited')
   } else {
     constructStudent()
   }
   clearInputs()
+  disableNewEditDeleteBtns(false)
+  console.log(students)
 })
 
 cancelBtn.addEventListener('click', (e) => {
