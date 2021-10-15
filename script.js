@@ -15,7 +15,29 @@ const studentMajor = document.getElementById('major')
 const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = []
+const students = [
+  {
+    firstName: 'Fahad',
+    lastName: 'Abdulhameed',
+    id: '45',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Sara',
+    lastName: 'W',
+    id: '5',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Jack',
+    lastName: 'A',
+    id: '325',
+    major: 'Programming',
+    selected: false,
+  },
+]
 
 let currentStudentIndex = 0
 let edit = false
@@ -59,6 +81,7 @@ function constructStudent() {
   student.major = studentMajor.value
   student.selected = studentSelected.checked
   students.push(student)
+  currentStudentIndex = students.length - 1
   updateLogs(student, 'Added')
 }
 
