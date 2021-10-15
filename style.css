@@ -80,7 +80,7 @@ main {
 }
 
 .form-control label,
-#logsSection p {
+#logsSection label {
   color: var(--secondary);
   font-weight: 700;
   display: block;

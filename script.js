@@ -12,15 +12,40 @@ const fname = document.getElementById('fname')
 const lname = document.getElementById('lname')
 const studentId = document.getElementById('studentId')
 const studentMajor = document.getElementById('major')
-const selected = document.getElementById('selected')
+const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = []
+const students = [
+  {
+    firstName: 'Fahad',
+    lastName: 'Abdulhameed',
+    id: '45',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Sara',
+    lastName: 'W',
+    id: '5',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Jack',
+    lastName: 'A',
+    id: '325',
+    major: 'Programming',
+    selected: false,
+  },
+]
+
+let currentStudentIndex = 0
 
 function clearInputs() {
   fname.value = ''
   lname.value = ''
   studentId.value = ''
+  studentSelected.checked = false
 }
 
 function disableNavBtns(param) {
@@ -43,11 +68,10 @@ function disableSaveCancelBtns(param) {
 }
 
 function updateLogs(student, action) {
-  let pNode = document.createElement('p')
-  let text = `${action}: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
-  let textNode = document.createTextNode(text)
-  pNode.appendChild(textNode)
-  logs.appendChild(pNode)
+  let text = `\n${action}: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
+  logs.value += text
+  // students.push(student)
+  console.log(students)
 }
 
 function constructStudent() {
@@ -56,9 +80,9 @@ function constructStudent() {
   student.lastName = lname.value
   student.id = studentId.value
   student.major = studentMajor.value
+  student.selected = studentSelected.checked
   students.push(student)
   updateLogs(student, 'Added')
-  clearInputs()
 }
 
 function editStudent(student) {
@@ -66,6 +90,7 @@ function editStudent(student) {
   lname.value = student.lastName
   studentId.value = student.id
   studentMajor.value = student.major
+  studentSelected.checked = student.selected
 
   students.forEach((studentIteration) => {
     if (studentIteration.id === student.id) {
@@ -73,6 +98,7 @@ function editStudent(student) {
       studentIteration.lastName = lname.value
       studentIteration.id = studentId.value
       studentIteration.major = studentMajor.value
+      studentIteration.selected = studentSelected.checked
     }
   })
 }
@@ -83,7 +109,7 @@ newBtn.addEventListener('click', (e) => {
   disableNewEditDeleteBtns(true)
   disableNavBtns(true)
   disableSaveCancelBtns(false)
-  selected.checked = false
+  studentSelected.checked = false
 })
 
 editBtn.addEventListener('click', (e) => {
@@ -100,12 +126,16 @@ editBtn.addEventListener('click', (e) => {
 
 deleteBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  let currentStudent = students.pop()
+  if (!students.length) {
+    return alert('There is no students to delete.')
+  }
+  let currentStudent = students[currentStudentIndex]
   let index = students.findIndex((student) => {
     return student.id === currentStudent.id
   })
-  updateLogs(currentStudent, 'Removed')
   students.splice(index, 1)
+  currentStudentIndex -= 1
+  updateLogs(currentStudent, 'Removed')
 })
 
 saveBtn.addEventListener('click', (e) => {
@@ -120,9 +150,11 @@ saveBtn.addEventListener('click', (e) => {
     let student = students.pop()
     editStudent(student)
     updateLogs(student, 'Edited')
+    students.push(student)
   } else {
     constructStudent()
   }
+  clearInputs()
 })
 
 cancelBtn.addEventListener('click', (e) => {
@@ -133,32 +165,36 @@ cancelBtn.addEventListener('click', (e) => {
 
 firstBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  if (students.length >= 1) {
-    let student = students[0]
-    updateLogs(student, 'First')
+  if (students.length) {
+    currentStudentIndex = 0
+    let currentStudent = students[currentStudentIndex]
+    updateLogs(currentStudent, 'First')
   }
 })
 
 prevBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  if (students.length >= 2) {
-    let student = students[1]
-    updateLogs(student, 'Previous')
+  if (currentStudentIndex >= 1) {
+    currentStudentIndex -= 1
+    let currentStudent = students[currentStudentIndex]
+    updateLogs(currentStudent, 'Previous')
   }
 })
 
 nextBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  if (students.length >= 3) {
-    let student = students[2]
-    updateLogs(student, 'Next')
+  if (students.length >= 2 && currentStudentIndex < students.length - 1) {
+    currentStudentIndex += 1
+    let currentStudent = students[currentStudentIndex]
+    updateLogs(currentStudent, 'Next')
   }
 })
 
 lastBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  if (students.length >= students.length) {
-    let student = students[students.length - 1]
+  if (students.length) {
+    currentStudentIndex = students.length - 1
+    let student = students[currentStudentIndex]
     updateLogs(student, 'Last')
   }
 })
@@ -167,7 +203,8 @@ selectBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length) {
     let student = students[Math.floor(Math.random() * students.length)]
+    let studentIndex = students.findIndex((st) => st.id === student.id)
+    students[studentIndex].selected = true
     updateLogs(student, 'Selected')
-    selected.checked = true
   }
 })
