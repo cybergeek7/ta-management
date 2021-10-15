@@ -15,9 +15,32 @@ const studentMajor = document.getElementById('major')
 const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = []
+const students = [
+  {
+    firstName: 'Fahad',
+    lastName: 'Abdulhameed',
+    id: '45',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Sara',
+    lastName: 'W',
+    id: '5',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Jack',
+    lastName: 'A',
+    id: '325',
+    major: 'Programming',
+    selected: false,
+  },
+]
 
 let currentStudentIndex = 0
+let edit = false
 
 function clearInputs() {
   fname.value = ''
@@ -94,6 +117,7 @@ editBtn.addEventListener('click', (e) => {
   if (!students.length) {
     return alert('There is no students to edit.')
   }
+  edit = true
   disableNavBtns(true)
   disableNewEditDeleteBtns(true)
   disableSaveCancelBtns(false)
@@ -121,15 +145,17 @@ saveBtn.addEventListener('click', (e) => {
   }
   disableNavBtns(false)
   disableSaveCancelBtns(true)
-  if (editBtn.disabled) {
+  disableNewEditDeleteBtns(false)
+  if (edit) {
     let currentStudent = students[currentStudentIndex]
     editStudent()
     updateLogs(currentStudent, 'Edited')
+    edit = false
   } else {
     constructStudent()
   }
   clearInputs()
-  disableNewEditDeleteBtns(false)
+  console.log(students)
 })
 
 cancelBtn.addEventListener('click', (e) => {
