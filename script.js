@@ -11,7 +11,7 @@ const selectBtn = document.getElementById('select')
 const fname = document.getElementById('fname')
 const lname = document.getElementById('lname')
 const studentId = document.getElementById('studentId')
-const major = document.getElementById('major')
+const studentMajor = document.getElementById('major')
 const selected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
@@ -42,6 +42,41 @@ function disableSaveCancelBtns(param) {
   cancelBtn.disabled = param
 }
 
+function updateLogs(student, action) {
+  let pNode = document.createElement('p')
+  let text = `${action}: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
+  let textNode = document.createTextNode(text)
+  pNode.appendChild(textNode)
+  logs.appendChild(pNode)
+}
+
+function constructStudent() {
+  let student = {}
+  student.firstName = fname.value
+  student.lastName = lname.value
+  student.id = studentId.value
+  student.major = studentMajor.value
+  students.push(student)
+  updateLogs(student, 'Added')
+  clearInputs()
+}
+
+function editStudent(student) {
+  fname.value = student.firstName
+  lname.value = student.lastName
+  studentId.value = student.id
+  studentMajor.value = student.major
+
+  students.forEach((studentIteration) => {
+    if (studentIteration.id === student.id) {
+      studentIteration.firsName = fname.value
+      studentIteration.lastName = lname.value
+      studentIteration.id = studentId.value
+      studentIteration.major = studentMajor.value
+    }
+  })
+}
+
 newBtn.addEventListener('click', (e) => {
   e.preventDefault()
   clearInputs()
@@ -52,16 +87,24 @@ newBtn.addEventListener('click', (e) => {
 
 editBtn.addEventListener('click', (e) => {
   e.preventDefault()
+  if (!students.length) {
+    return alert('There is no students to edit.')
+  }
   disableNavBtns(true)
   disableNewEditDeleteBtns(true)
   disableSaveCancelBtns(false)
-  if (logs.value) {
-    console.log(logs.value)
-  }
+  let student = students.pop()
+  editStudent(student)
 })
 
 deleteBtn.addEventListener('click', (e) => {
   e.preventDefault()
+  let currentStudent = students.pop()
+  let index = students.findIndex((student) => {
+    return student.id === currentStudent.id
+  })
+  updateLogs(currentStudent, 'Removed')
+  students.splice(index, 1)
 })
 
 saveBtn.addEventListener('click', (e) => {
@@ -72,30 +115,58 @@ saveBtn.addEventListener('click', (e) => {
   disableNewEditDeleteBtns(false)
   disableNavBtns(false)
   disableSaveCancelBtns(true)
-  let student = {}
-  student.firstName = fname.value
-  student.lastName = lname.value
-  student.id = studentId.value
-  student.major = major.value
-  let option = document.createElement('option')
-  if (students.length) {
-    let text = `\nAdded: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
-    let textNode = document.createTextNode(text)
-    option.appendChild(textNode)
-    option.value = student.id
-    logs.appendChild(option)
+  if (editBtn.disabled) {
+    let student = students.pop()
+    editStudent(student)
+    updateLogs(student, 'Edited')
   } else {
-    let text = `Added: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
-    let textNode = document.createTextNode(text)
-    option.appendChild(textNode)
-    option.value = student.id
-    logs.appendChild(option)
+    constructStudent()
   }
-  students.push(student)
 })
 
 cancelBtn.addEventListener('click', (e) => {
   e.preventDefault()
   disableNewEditDeleteBtns(false)
   disableNavBtns(false)
+})
+
+firstBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (students.length >= 1) {
+    let student = students[0]
+    updateLogs(student, 'First')
+  }
+})
+
+prevBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (students.length >= 2) {
+    let student = students[1]
+    updateLogs(student, 'Previous')
+  }
+})
+
+nextBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (students.length >= 3) {
+    let student = students[2]
+    updateLogs(student, 'Next')
+  }
+})
+
+lastBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (students.length >= students.length) {
+    let student = students[students.length - 1]
+    updateLogs(student, 'Last')
+  }
+})
+
+selectBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (students.length) {
+    let student = students[Math.floor(Math.random() * students.length)]
+    updateLogs(student, 'Selected')
+    selected.checked = true
+  }
 })
