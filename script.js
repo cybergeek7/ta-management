@@ -83,6 +83,7 @@ newBtn.addEventListener('click', (e) => {
   disableNewEditDeleteBtns(true)
   disableNavBtns(true)
   disableSaveCancelBtns(false)
+  selected.checked = false
 })
 
 editBtn.addEventListener('click', (e) => {
