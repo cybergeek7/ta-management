@@ -15,29 +15,7 @@ const studentMajor = document.getElementById('major')
 const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = [
-  {
-    firstName: 'Fahad',
-    lastName: 'Abdulhameed',
-    id: '45',
-    major: 'Programming',
-    selected: false,
-  },
-  {
-    firstName: 'Sara',
-    lastName: 'W',
-    id: '5',
-    major: 'Programming',
-    selected: false,
-  },
-  {
-    firstName: 'Jack',
-    lastName: 'A',
-    id: '325',
-    major: 'Programming',
-    selected: false,
-  },
-]
+const students = []
 
 let currentStudentIndex = 0
 let edit = false
@@ -155,7 +133,6 @@ saveBtn.addEventListener('click', (e) => {
     constructStudent()
   }
   clearInputs()
-  console.log(students)
 })
 
 cancelBtn.addEventListener('click', (e) => {
