@@ -13,6 +13,9 @@ const lname = document.getElementById('lname')
 const studentId = document.getElementById('studentId')
 const major = document.getElementById('major')
 const selected = document.getElementById('selected')
+const logs = document.getElementById('logs')
+
+const students = []
 
 function clearInputs() {
   fname.value = ''
@@ -51,6 +54,10 @@ editBtn.addEventListener('click', (e) => {
   e.preventDefault()
   disableNavBtns(true)
   disableNewEditDeleteBtns(true)
+  disableSaveCancelBtns(false)
+  if (logs.value) {
+    console.log(logs.value)
+  }
 })
 
 deleteBtn.addEventListener('click', (e) => {
@@ -59,9 +66,32 @@ deleteBtn.addEventListener('click', (e) => {
 
 saveBtn.addEventListener('click', (e) => {
   e.preventDefault()
+  if (!fname.value || !lname.value || !studentId.value) {
+    return alert('Please fill out the fields above.')
+  }
   disableNewEditDeleteBtns(false)
   disableNavBtns(false)
   disableSaveCancelBtns(true)
+  let student = {}
+  student.firstName = fname.value
+  student.lastName = lname.value
+  student.id = studentId.value
+  student.major = major.value
+  let option = document.createElement('option')
+  if (students.length) {
+    let text = `\nAdded: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
+    let textNode = document.createTextNode(text)
+    option.appendChild(textNode)
+    option.value = student.id
+    logs.appendChild(option)
+  } else {
+    let text = `Added: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
+    let textNode = document.createTextNode(text)
+    option.appendChild(textNode)
+    option.value = student.id
+    logs.appendChild(option)
+  }
+  students.push(student)
 })
 
 cancelBtn.addEventListener('click', (e) => {
@@ -69,5 +99,3 @@ cancelBtn.addEventListener('click', (e) => {
   disableNewEditDeleteBtns(false)
   disableNavBtns(false)
 })
-
-const taCandidates = []
