@@ -140,6 +140,7 @@ cancelBtn.addEventListener('click', (e) => {
   e.preventDefault()
   disableNewEditDeleteBtns(false)
   disableNavBtns(false)
+  clearInputs()
 })
 
 firstBtn.addEventListener('click', (e) => {
