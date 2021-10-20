@@ -102,12 +102,12 @@ function retrieveStudent(student) {
 }
 
 // Edit the current student
-function editStudent(student) {
-  student.firstName = fname.value
-  student.lastName = lname.value
-  student.id = studentId.value
-  student.major = studentMajor.value
-  student.selected = studentSelected.checked
+function editStudent() {
+  currentStudent.lastName = lname.value
+  currentStudent.id = studentId.value
+  currentStudent.major = studentMajor.value
+  currentStudent.firstName = fname.value
+  currentStudent.selected = studentSelected.checked
 }
 
 // Clear inputs and logs on page reload
@@ -133,7 +133,7 @@ editBtn.addEventListener('click', (e) => {
   disableNavBtns(true)
   disableNewEditDeleteBtns(true)
   disableSaveCancelBtns(false)
-  retrieveStudent(students[currentStudentIndex])
+  retrieveStudent(currentStudent)
 })
 
 deleteBtn.addEventListener('click', (e) => {
@@ -159,7 +159,7 @@ saveBtn.addEventListener('click', (e) => {
   disableSaveCancelBtns(true)
   disableNewEditDeleteBtns(false)
   if (edit) {
-    editStudent(currentStudent)
+    editStudent()
     updateLogs(currentStudent, 'Edited')
     edit = false
   } else {
@@ -214,11 +214,9 @@ lastBtn.addEventListener('click', (e) => {
 selectBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length) {
-    let Selectedstudent = students[Math.floor(Math.random() * students.length)]
-    let studentIndex = students.findIndex(
-      (student) => student.id === Selectedstudent.id
-    )
-    students[studentIndex].selected = true
-    updateLogs(Selectedstudent, 'Selected')
+    let index = Math.floor(Math.random() * students.length)
+    currentStudent = students[index]
+    currentStudent.selected = true
+    updateLogs(currentStudent, 'Selected')
   }
 })
