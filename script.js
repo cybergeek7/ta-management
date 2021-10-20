@@ -87,8 +87,9 @@ function constructStudent() {
   student.id = studentId.value
   student.major = studentMajor.value
   student.selected = studentSelected.checked
-  currentStudentIndex = students.length - 1
   students.push(student)
+  currentStudentIndex = students.length - 1
+  currentStudent = students[currentStudentIndex]
   updateLogs(student, 'Added')
 }
 
