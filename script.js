@@ -15,11 +15,35 @@ const studentMajor = document.getElementById('major')
 const studentSelected = document.getElementById('selected')
 const logs = document.getElementById('logs')
 
-const students = []
+const students = [
+  {
+    firstName: 'John',
+    id: '3445',
+    lastName: 'Doe',
+    major: 'Programming',
+    selected: false,
+  },
+  {
+    firstName: 'Jane',
+    id: '47635',
+    lastName: 'Doe',
+    major: 'Testing',
+    selected: false,
+  },
+  {
+    firstName: 'Sara',
+    id: '9873',
+    lastName: 'William',
+    major: 'Database',
+    selected: false,
+  },
+]
 
 let currentStudentIndex = 0
+let currentStudent = students[currentStudentIndex]
 let edit = false
 
+// Clear all input fields
 function clearInputs() {
   fname.value = ''
   lname.value = ''
@@ -27,6 +51,7 @@ function clearInputs() {
   studentSelected.checked = false
 }
 
+// Disable navigation buttons
 function disableNavBtns(param) {
   firstBtn.disabled = param
   prevBtn.disabled = param
@@ -35,22 +60,26 @@ function disableNavBtns(param) {
   selectBtn.disabled = param
 }
 
+// Disable new, edit and delete buttons
 function disableNewEditDeleteBtns(param) {
   newBtn.disabled = param
   editBtn.disabled = param
   deleteBtn.disabled = param
 }
 
+// Disable save and cancel buttons
 function disableSaveCancelBtns(param) {
   saveBtn.disabled = param
   cancelBtn.disabled = param
 }
 
+// Update logs in the text area
 function updateLogs(student, action) {
   let text = `\n${action}: ${student.firstName} ${student.lastName}, ${student.id}, ${student.major}`
   logs.value += text
 }
 
+// Costruct a new student object
 function constructStudent() {
   let student = {}
   student.firstName = fname.value
@@ -58,11 +87,12 @@ function constructStudent() {
   student.id = studentId.value
   student.major = studentMajor.value
   student.selected = studentSelected.checked
-  students.push(student)
   currentStudentIndex = students.length - 1
+  students.push(student)
   updateLogs(student, 'Added')
 }
 
+// Retrieve the current student
 function retrieveStudent(student) {
   fname.value = student.firstName
   lname.value = student.lastName
@@ -70,18 +100,21 @@ function retrieveStudent(student) {
   studentMajor.value = student.major
   studentSelected.checked = student.selected
 }
-function editStudent() {
-  let currentStudent = students[currentStudentIndex]
-  currentStudent.firstName = fname.value
-  currentStudent.lastName = lname.value
-  currentStudent.id = studentId.value
-  currentStudent.major = studentMajor.value
-  currentStudent.selected = studentSelected.checked
+
+// Edit the current student
+function editStudent(student) {
+  student.firstName = fname.value
+  student.lastName = lname.value
+  student.id = studentId.value
+  student.major = studentMajor.value
+  student.selected = studentSelected.checked
 }
 
+// Clear inputs and logs on page reload
 clearInputs()
 logs.value = ''
 
+// Event Listeners for the buttons
 newBtn.addEventListener('click', (e) => {
   e.preventDefault()
   clearInputs()
@@ -108,12 +141,12 @@ deleteBtn.addEventListener('click', (e) => {
   if (!students.length) {
     return alert('There is no students to delete.')
   }
-  let currentStudent = students[currentStudentIndex]
   let index = students.findIndex((student) => {
     return student.id === currentStudent.id
   })
   students.splice(index, 1)
   currentStudentIndex -= 1
+  currentStudent = students[currentStudentIndex]
   updateLogs(currentStudent, 'Removed')
 })
 
@@ -126,8 +159,7 @@ saveBtn.addEventListener('click', (e) => {
   disableSaveCancelBtns(true)
   disableNewEditDeleteBtns(false)
   if (edit) {
-    let currentStudent = students[currentStudentIndex]
-    editStudent()
+    editStudent(currentStudent)
     updateLogs(currentStudent, 'Edited')
     edit = false
   } else {
@@ -147,7 +179,7 @@ firstBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length) {
     currentStudentIndex = 0
-    let currentStudent = students[currentStudentIndex]
+    currentStudent = students[currentStudentIndex]
     updateLogs(currentStudent, 'First')
   }
 })
@@ -156,7 +188,7 @@ prevBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (currentStudentIndex >= 1) {
     currentStudentIndex -= 1
-    let currentStudent = students[currentStudentIndex]
+    currentStudent = students[currentStudentIndex]
     updateLogs(currentStudent, 'Previous')
   }
 })
@@ -165,7 +197,7 @@ nextBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length >= 2 && currentStudentIndex < students.length - 1) {
     currentStudentIndex += 1
-    let currentStudent = students[currentStudentIndex]
+    currentStudent = students[currentStudentIndex]
     updateLogs(currentStudent, 'Next')
   }
 })
@@ -174,17 +206,19 @@ lastBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length) {
     currentStudentIndex = students.length - 1
-    let student = students[currentStudentIndex]
-    updateLogs(student, 'Last')
+    currentStudent = students[currentStudentIndex]
+    updateLogs(currentStudent, 'Last')
   }
 })
 
 selectBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (students.length) {
-    let student = students[Math.floor(Math.random() * students.length)]
-    let studentIndex = students.findIndex((st) => st.id === student.id)
+    let Selectedstudent = students[Math.floor(Math.random() * students.length)]
+    let studentIndex = students.findIndex(
+      (student) => student.id === Selectedstudent.id
+    )
     students[studentIndex].selected = true
-    updateLogs(student, 'Selected')
+    updateLogs(Selectedstudent, 'Selected')
   }
 })
