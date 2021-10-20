@@ -108,6 +108,8 @@ function editStudent() {
   currentStudent.major = studentMajor.value
   currentStudent.firstName = fname.value
   currentStudent.selected = studentSelected.checked
+  updateLogs(currentStudent, 'Edited')
+  edit = false
 }
 
 // Clear inputs and logs on page reload
@@ -160,8 +162,6 @@ saveBtn.addEventListener('click', (e) => {
   disableNewEditDeleteBtns(false)
   if (edit) {
     editStudent()
-    updateLogs(currentStudent, 'Edited')
-    edit = false
   } else {
     constructStudent()
   }
